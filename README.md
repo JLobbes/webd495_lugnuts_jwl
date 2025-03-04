@@ -23,7 +23,8 @@ Entity Relationship Diagram:
     ----
     attribute(FIREBASE_UID)
     attribute(USER_EMAIL)
-    attribute(USER_FULL_NAME)
+    attribute(USER_FIRST_NAME)
+    attribute(USER_LAST_NAME)
     attribute(USER_ADDRESS)
     attribute(USER_PHONE_NUMBER)
     }
