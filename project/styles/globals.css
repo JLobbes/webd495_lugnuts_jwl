@@ -1,0 +1,32 @@
+/* styles/globals.css */
+
+@font-face {
+  font-family: 'Sansation';
+  src: url('../public/fonts/Sansation_Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Sansation', sans-serif;
+}
+
+input, textarea, select {
+  font-family: 'Sansation', sans-serif;
+  font-size: 16px;
+}
+
+/* The global layout styles */
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+  width: 80%;
+  margin: 0 auto; /* Center the footer */
+}

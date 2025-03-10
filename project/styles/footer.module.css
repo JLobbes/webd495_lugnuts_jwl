@@ -1,0 +1,16 @@
+/* styles/footer.module.css */
+.footer {
+  background-color: black;
+  height: 100px;
+  width: 80%;
+  margin: 0 auto; /* Center the footer */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
