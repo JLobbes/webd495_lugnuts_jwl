@@ -3,7 +3,7 @@
   background-color: black;
   height: 100px;
   width: 80%;
-  margin: 0 auto; /* Center the footer */
+  margin: 0 auto; 
   display: flex;
   justify-content: center;
   align-items: center;

@@ -18,7 +18,7 @@ input, textarea, select {
   font-size: 16px;
 }
 
-/* The global layout styles */
+/* this is applied to global div */
 #__next {
   display: flex;
   flex-direction: column;
@@ -28,5 +28,5 @@ input, textarea, select {
 main {
   flex-grow: 1;
   width: 80%;
-  margin: 0 auto; /* Center the footer */
+  margin: 0 auto; 
 }
