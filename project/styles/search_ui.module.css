@@ -1,0 +1,89 @@
+.resultsContainer {
+  width: 100%;
+}
+
+.productList {
+  display: flex;
+  flex-direction: column; 
+  gap: 20px;
+  justify-content: flex-start; 
+  align-items: center; /* center the long tiles */
+}
+
+.productTile {
+  background-color: black;
+  color: white;
+  width: 90%; 
+  padding: 20px;
+  display: flex;
+  flex-direction: row; 
+  gap: 20px; 
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.productTileExpanded {
+  height: auto;
+}
+
+.productImageContainer {
+  width: 100px; 
+  height: 100px;
+  overflow: hidden;
+}
+
+.productImage {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.productTile:hover .productImage {
+  transform: scale(1.1);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: row; 
+  gap: 10px; 
+  align-items: center;
+  width: 100%;
+}
+
+.productInfo > * {
+  flex: 1; /* each child given equal width for now */
+  text-align: center; 
+}
+
+.productDescription {
+  font-size: 14px;
+  color: #ddd;
+  max-width: 200px; /* limit visible description */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productTileExpanded .productDescription {
+  max-height: none;
+}
+
+.productButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.productButtons button {
+  padding: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.productButtons button:hover {
+  background-color: #555;
+}
