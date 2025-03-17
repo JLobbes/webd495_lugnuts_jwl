@@ -1,0 +1,96 @@
+/* signup.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 80%;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.imageContainer {
+  flex: 1.5;
+  background-image: url('../public/car_engine_closeup.png');
+  background-size: cover;
+  background-position: center;
+  height: 95%;
+  border-radius: 10px;
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #000; /* Black form background */
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formTitle {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column; /* Ensures form fields and button are stacked vertically */
+}
+
+.inputGroup {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid white; /* White border for input */
+  color: black; /* Black text inside input */
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.button {
+  padding: 12px;
+  background-color: white; /* White background for button */
+  color: black; /* Black text for button */
+  font-size: 1.1rem;
+  border: 1px solid black; /* Black border for button */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px; /* Ensures the button is below the form */
+}
+
+.button:hover {
+  background-color: #f0f0f0; /* Slightly grey background on hover */
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
