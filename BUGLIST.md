@@ -8,3 +8,7 @@
 |         | logic for image links on the product input page.                  |          | 
 | BUG-003 | Make Nav Bar search bar functional                                | HIGH     |
 |         |                                                                   |          | 
+| BUG-004 | Sign-up submit is off center.                                     | LOW      |
+|         |                                                                   |          | 
+| BUG-003 | Sign-up background has water mark.                                | HIGH     |
+|         |                                                                   |          | 

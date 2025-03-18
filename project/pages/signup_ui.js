@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { auth, createUserWithEmailAndPassword } from '../lib/firebase';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
-import styles from '../styles/signup.module.css'; // Import the CSS module for styling
+import styles from '../styles/signup.module.css'; 
 
 export default function SignUp() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function SignUp() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Sign Up Successful');
-      router.push('/'); // Redirect to homepage or dashboard
+      router.push('/'); // currently redirects to index.js
     } catch (err) {
       setError(err.message);
     } finally {
@@ -33,7 +33,7 @@ export default function SignUp() {
     <>
       <Nav />
       <div className={styles.container}>
-        <div className={styles.imageContainer}></div> {/* Background image handled here */}
+        <div className={styles.imageContainer}></div> {/* has image as background */}
         <div className={styles.formContainer}>
           <h1 className={styles.formTitle}>Create an Account</h1>
           {error && <p className={styles.error}>{error}</p>}

@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+// must specically pull the getAuth, createUserWithEmailAndPassword modules. This is current mthod
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -11,11 +11,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
+// intialize & export
 const app = initializeApp(firebaseConfig);
-
-// Get authentication instance
 const auth = getAuth(app);
-
-// Export the auth and createUserWithEmailAndPassword
 export { auth, createUserWithEmailAndPassword };
