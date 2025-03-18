@@ -10,5 +10,8 @@
 |         |                                                                   |          | 
 | BUG-004 | Sign-up submit is off center.                                     | LOW      |
 |         |                                                                   |          | 
-| BUG-003 | Sign-up background has water mark.                                | HIGH     |
+| BUG-005 | Sign-up background has water mark.                                | LOW      |
 |         |                                                                   |          | 
+| BUG-006 | Make sure read_all DB api calls have auth before deployment       | HIGH     |
+|         |                                                                   |          | 
+

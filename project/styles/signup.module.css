@@ -1,35 +1,28 @@
 /* signup.module.css */
-.container {
+.mainContainer {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  height: 100vh;
-  width: 80%;
-  margin: 0 auto;
-  gap: 2rem;
-}
-
-.imageContainer {
-  flex: 1.5;
-  background-image: url('../public/car_engine_closeup.png');
-  background-size: cover;
-  background-position: center;
-  height: 95%;
-  border-radius: 10px;
+  justify-content: center;
+  height: 100%; 
 }
 
 .formContainer {
-  flex: 1;
+  flex: 1; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 20px;
   border-radius: 10px;
-  background-color: #000; /* Black form background */
+  background-color: #000;
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  max-width: 500px;
+  margin-left: 10px;
 }
+
 
 .formTitle {
   font-size: 2rem;
@@ -44,9 +37,9 @@
 
 .form {
   width: 100%;
-  max-width: 400px;
   display: flex;
-  flex-direction: column; /* Ensures form fields and button are stacked vertically */
+  flex-direction: column; 
+  align-items: center;
 }
 
 .inputGroup {
@@ -61,12 +54,12 @@
 }
 
 .input {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   font-size: 1rem;
   border-radius: 5px;
-  border: 1px solid white; /* White border for input */
-  color: black; /* Black text inside input */
+  border: 1px solid white; 
+  color: black; 
 }
 
 .input:focus {
@@ -76,18 +69,19 @@
 
 .button {
   padding: 12px;
-  background-color: white; /* White background for button */
-  color: black; /* Black text for button */
+  background-color: white; 
+  width: 70%;
+  color: black; 
   font-size: 1.1rem;
-  border: 1px solid black; /* Black border for button */
+  border: 1px solid black; 
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 20px; /* Ensures the button is below the form */
+  margin-top: 20px; 
 }
 
 .button:hover {
-  background-color: #f0f0f0; /* Slightly grey background on hover */
+  background-color: #f0f0f0; 
 }
 
 .button:disabled {
