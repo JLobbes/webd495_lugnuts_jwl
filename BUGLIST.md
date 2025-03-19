@@ -14,4 +14,9 @@
 |         |                                                                   |          | 
 | BUG-006 | Make sure read_all DB api calls have auth before deployment       | HIGH     |
 |         |                                                                   |          | 
-
+| BUG-007 | Rename ui pages                                                   | LOW      |
+|         |                                                                   |          | 
+| BUG-008 | Don't create account unless user completes all registration       | MED      |
+|         |                                                                   |          | 
+| BUG-009 | Add phone number + address validation                             | MED      |
+|         |                                                                   |          | 

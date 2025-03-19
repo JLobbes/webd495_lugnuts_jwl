@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-// must specically pull the getAuth, createUserWithEmailAndPassword modules. This is current mthod
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+// must specically pull the modules. This is current mthod
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,4 +14,4 @@ const firebaseConfig = {
 // intialize & export
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-export { auth, createUserWithEmailAndPassword };
+export { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword };
