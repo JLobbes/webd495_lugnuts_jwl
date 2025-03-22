@@ -20,7 +20,7 @@ Entity Relationship Diagram:
     ' Define entities
     entity USERS {
     primary_key(USER_ID)
-    ----
+    ----   
     attribute(FIREBASE_UID)
     attribute(USER_EMAIL)
     attribute(USER_FIRST_NAME)

@@ -20,3 +20,15 @@
 |         |                                                                   |          | 
 | BUG-009 | Add phone number + address validation                             | MED      |
 |         |                                                                   |          | 
+| BUG-010 | Add fuzzy matching to search function                             | HIGH     |
+|         |                                                                   |          | 
+| BUG-011 | Add categories to search + DB                                     | MED      |
+|         |                                                                   |          | 
+| BUG-012 | Add more security to profile updates, send sess code, not uid?    | HIGH     |
+|         |                                                                   |          | 
+| BUG-013 | Add password + email update                                       | HIGH     |
+|         |                                                                   |          |
+| BUG-014 | Add navigation to nav bar                                         | HIGH     |
+|         |                                                                   |          | 
+| BUG-015 | Check for sign in for user_profile.js                             | MED      |
+|         |                                                                   |          | 
