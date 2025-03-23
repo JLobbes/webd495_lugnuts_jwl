@@ -26,9 +26,12 @@
 |         |                                                                   |          | 
 | BUG-012 | Add more security to profile updates, send sess code, not uid?    | HIGH     |
 |         |                                                                   |          | 
-| BUG-013 | Add password + email update                                       | HIGH     |
+| BUG-013 | Add password + email update (firebase)                            | HIGH     |
 |         |                                                                   |          |
 | BUG-014 | Add navigation to nav bar                                         | HIGH     |
 |         |                                                                   |          | 
 | BUG-015 | Check for sign in for user_profile.js                             | MED      |
 |         |                                                                   |          | 
+| BUG-016 | Remove alerts, change to fading message box or similar            | MED      |
+|         |                                                                   |          | 
+
