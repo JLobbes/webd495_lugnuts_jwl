@@ -34,4 +34,9 @@
 |         |                                                                   |          | 
 | BUG-016 | Remove alerts, change to fading message box or similar            | MED      |
 |         |                                                                   |          | 
-
+| BUG-017 | Clicking on product buttons toggles description visibility        | MED-LOW  |
+|         |                                                                   |          | 
+| BUG-018 | Add fillable product quantity to cart                             | MED      |
+|         |                                                                   |          | 
+| BUG-019 | Not logged in user, redirect to login if clicks add to cart       | MED      |
+|         |                                                                   |          | 
