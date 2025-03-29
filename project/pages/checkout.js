@@ -3,19 +3,19 @@ import { useRouter } from 'next/router';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import styles from '../styles/checkout.module.css';
-import checkAuth from '../hooks/checkAuth';  
+import checkAuth from '../hooks/checkAuth';
 
 export default function Checkout() {
   const [step, setStep] = useState(1);
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [cartItems, setCartItems] = useState([]);
-  const [productDetails, setProductDetails] = useState({});  
-  const [loading, setLoading] = useState(true);  
-  const user = checkAuth();  
+  const [productDetails, setProductDetails] = useState({});
+  const [loading, setLoading] = useState(true);
+  const user = checkAuth();
   const router = useRouter();
 
-  // fetch the items in the cart
+  // Fetch the items in the cart
   useEffect(() => {
     if (user) {
       const fetchCart = async () => {
@@ -24,17 +24,17 @@ export default function Checkout() {
 
         if (data && data.length > 0) {
           setCartItems(data);
-          fetchProductDetails(data); 
+          fetchProductDetails(data);
         } else {
           setCartItems([]);  // empty cart
         }
-        setLoading(false);  
+        setLoading(false);
       };
       fetchCart();
     }
   }, [user]);
 
-  // fetch product details based on the cart items
+  // Fetch product details based on the cart items
   const fetchProductDetails = async (cartData) => {
     const productDetailsMap = {};
 
@@ -42,25 +42,114 @@ export default function Checkout() {
       const productId = cartData[i].PRODUCT_ID;
       const response = await fetch(`/api/products/read_by_id?id=${productId}`);
       const product = await response.json();
-      
+
       if (product) {
         productDetailsMap[productId] = product;
       }
     }
 
-    setProductDetails(productDetailsMap);  
+    setProductDetails(productDetailsMap);
   };
 
-  const handleProceedToPayment = () => {
-    router.push('/payment');
+  // Proceed to payment
+  const handleProceedToPayment = async () => {
+    const orderTotalAmount = calculateTotalPrice();
+    
+    // Step 1: Create order
+    const orderData = {
+      FIREBASE_UID: user.uid,
+      ORDER_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
+      ORDER_TOTAL_AMOUNT: parseFloat(orderTotalAmount),  // Make sure it's a number
+      ORDER_STATUS: 'pending',
+      ORDER_SHIPPING_ADDRESS: address,
+    };
+
+    console.log('Creating order with data:', orderData);
+
+    const orderResponse = await fetch('/api/orders/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!orderResponse.ok) {
+      console.error('Failed to create order');
+      alert('Failed to create order');
+      return;
+    }
+
+    const order = await orderResponse.json();
+    console.log('Order created:', order);
+
+    // Step 2: Add order items
+    for (let item of cartItems) {
+      const product = productDetails[item.PRODUCT_ID];
+      const orderItemData = {
+        ORDER_ID: order.ORDER_ID,
+        PRODUCT_ID: item.PRODUCT_ID,
+        ORDER_ITEM_QUANTITY: item.CART_ITEM_QUANTITY,
+        ORDER_ITEM_PRICE: product.PRODUCT_PRICE,
+      };
+
+      console.log('Adding order item with data:', orderItemData);
+
+      const orderItemResponse = await fetch('/api/orderitems/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderItemData),
+      });
+
+      if (!orderItemResponse.ok) {
+        console.error('Failed to add order item');
+        alert('Failed to add order item');
+        return;
+      }
+
+      const orderItem = await orderItemResponse.json();
+      console.log('Order item added:', orderItem);
+    }
+
+    // Step 3: Create transaction
+    const transactionData = {
+      ORDER_ID: order.ORDER_ID,
+      TRANSACTION_PAYMENT_STATUS: 'pending',
+      TRANSACTION_PAYMENT_METHOD: 'stripe',
+      TRANSACTION_PAYMENT_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
+    };
+
+    console.log('Creating transaction with data:', transactionData);
+
+    const transactionResponse = await fetch('/api/transactions/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(transactionData),
+    });
+
+    if (!transactionResponse.ok) {
+      console.error('Failed to create transaction');
+      alert('Failed to create transaction');
+      return;
+    }
+
+    const transaction = await transactionResponse.json();
+    console.log('Transaction created:', transaction);
+
+    // Now you can proceed to Stripe checkout or any other actions as needed
+    console.log('Order, items, and transaction created successfully');
   };
 
-  // calculate total price for each item (price * quantity)
+  // Calculate total price for each item (price * quantity)
   const calculateItemTotalPrice = (productPrice, quantity) => {
     return (productPrice * quantity).toFixed(2);  // return as a formatted string
   };
 
-  // calculate total price for all items in the cart
+  // Calculate total price for all items in the cart
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
       const product = productDetails[item.PRODUCT_ID];
@@ -83,13 +172,13 @@ export default function Checkout() {
             <>
               <h2 className={styles.reviewTitle}>review order</h2>
               {loading ? (
-                <p>loading order...</p>  
+                <p>loading order...</p>
               ) : (
                 <div className={styles.orderList}>
                   {cartItems.length > 0 ? (
                     cartItems.map((item, index) => {
-                      const product = productDetails[item.PRODUCT_ID];  
-                      if (!product) return null;  
+                      const product = productDetails[item.PRODUCT_ID];
+                      if (!product) return null;
 
                       const totalItemPrice = calculateItemTotalPrice(product.PRODUCT_PRICE, item.CART_ITEM_QUANTITY);
 
@@ -103,7 +192,7 @@ export default function Checkout() {
                       );
                     })
                   ) : (
-                    <p>no items in your cart.</p>  
+                    <p>no items in your cart.</p>
                   )}
                 </div>
               )}
