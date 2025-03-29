@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';  
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import styles from '../styles/checkout.module.css';
@@ -15,7 +16,7 @@ export default function Checkout() {
   const user = checkAuth();
   const router = useRouter();
 
-  // Fetch the items in the cart
+  // fetch items in cart
   useEffect(() => {
     if (user) {
       const fetchCart = async () => {
@@ -34,7 +35,7 @@ export default function Checkout() {
     }
   }, [user]);
 
-  // Fetch product details based on the cart items
+  // fetch product details for cart items
   const fetchProductDetails = async (cartData) => {
     const productDetailsMap = {};
 
@@ -51,7 +52,6 @@ export default function Checkout() {
     setProductDetails(productDetailsMap);
   };
 
-  // Proceed to payment
   const handleProceedToPayment = async () => {
     const orderTotalAmount = calculateTotalPrice();
     
@@ -59,7 +59,7 @@ export default function Checkout() {
     const orderData = {
       FIREBASE_UID: user.uid,
       ORDER_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
-      ORDER_TOTAL_AMOUNT: parseFloat(orderTotalAmount),  // Make sure it's a number
+      ORDER_TOTAL_AMOUNT: parseFloat(orderTotalAmount),  // must be a number
       ORDER_STATUS: 'pending',
       ORDER_SHIPPING_ADDRESS: address,
     };
@@ -81,7 +81,6 @@ export default function Checkout() {
     }
 
     const order = await orderResponse.json();
-    console.log('Order created:', order);
 
     // Step 2: Add order items
     for (let item of cartItems) {
@@ -92,8 +91,6 @@ export default function Checkout() {
         ORDER_ITEM_QUANTITY: item.CART_ITEM_QUANTITY,
         ORDER_ITEM_PRICE: product.PRODUCT_PRICE,
       };
-
-      console.log('Adding order item with data:', orderItemData);
 
       const orderItemResponse = await fetch('/api/orderitems/add', {
         method: 'POST',
@@ -121,8 +118,6 @@ export default function Checkout() {
       TRANSACTION_PAYMENT_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
     };
 
-    console.log('Creating transaction with data:', transactionData);
-
     const transactionResponse = await fetch('/api/transactions/create', {
       method: 'POST',
       headers: {
@@ -138,18 +133,30 @@ export default function Checkout() {
     }
 
     const transaction = await transactionResponse.json();
-    console.log('Transaction created:', transaction);
 
-    // Now you can proceed to Stripe checkout or any other actions as needed
-    console.log('Order, items, and transaction created successfully');
+    const stripeResponse = await fetch('/api/stripe/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderTotalAmount: parseFloat(orderTotalAmount),
+        user: user,  
+      }),
+    });
+
+    // Use Stripe.js to redirect to the Checkout page
+    const stripe = window.Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+    const { sessionId } = await stripeResponse.json();
+    await stripe.redirectToCheckout({ sessionId });
   };
 
-  // Calculate total price for each item (price * quantity)
+  // per item price
   const calculateItemTotalPrice = (productPrice, quantity) => {
     return (productPrice * quantity).toFixed(2);  // return as a formatted string
   };
 
-  // Calculate total price for all items in the cart
+  // grand total price
   const calculateTotalPrice = () => {
     return cartItems.reduce((total, item) => {
       const product = productDetails[item.PRODUCT_ID];
@@ -163,14 +170,17 @@ export default function Checkout() {
 
   return (
     <>
+      <Head>
+        <script src="https://js.stripe.com/v3/"></script>
+      </Head>
       <Nav />
       <main className={styles.mainContainer}>
         <div className={styles.formContainer}>
-          <h1 className={styles.formTitle}>checkout</h1>
+          <h1 className={styles.formTitle}>Checkout</h1>
 
           {step === 1 && (
             <>
-              <h2 className={styles.reviewTitle}>review order</h2>
+              <h2 className={styles.reviewTitle}>Review Order</h2>
               {loading ? (
                 <p>loading order...</p>
               ) : (
@@ -192,7 +202,7 @@ export default function Checkout() {
                       );
                     })
                   ) : (
-                    <p>no items in your cart.</p>
+                    <p>No items in your cart.</p>
                   )}
                 </div>
               )}
@@ -200,8 +210,8 @@ export default function Checkout() {
                 <span>total:</span>
                 <span className={styles.grandTotalPrice}> ${calculateTotalPrice()}</span>
               </div>
-              <button className={styles.button} onClick={() => router.push('/user_cart')}>back to cart</button>
-              <button className={styles.button} onClick={() => setStep(2)}>next</button>
+              <button className={styles.button} onClick={() => router.push('/user_cart')}>Go back to my cart 🛒</button>
+              <button className={styles.button} onClick={() => setStep(2)}>Next</button>
             </>
           )}
 
@@ -209,7 +219,7 @@ export default function Checkout() {
             <>
               <h2 className={styles.addressTitle}>enter address</h2>
               <div className={styles.inputGroup}>
-                <label htmlFor="address" className={styles.inputLabel}>address</label>
+                <label htmlFor="address" className={styles.inputLabel}>Address</label>
                 <input
                   type="text"
                   id="address"
@@ -220,7 +230,7 @@ export default function Checkout() {
                 />
               </div>
               <div className={styles.inputGroup}>
-                <label htmlFor="phoneNumber" className={styles.inputLabel}>phone number</label>
+                <label htmlFor="phoneNumber" className={styles.inputLabel}>Phone number</label>
                 <input
                   type="text"
                   id="phoneNumber"
@@ -230,20 +240,20 @@ export default function Checkout() {
                   className={styles.input}
                 />
               </div>
-              <button className={styles.button} onClick={() => setStep(1)}>back</button>
-              <button className={styles.button} onClick={() => setStep(3)}>next</button>
+              <button className={styles.button} onClick={() => setStep(1)}>Back</button>
+              <button className={styles.button} onClick={() => setStep(3)}>Next</button>
             </>
           )}
 
           {step === 3 && (
             <>
-              <h2 className={styles.confirmationTitle}>confirm your details</h2>
+              <h2 className={styles.confirmationTitle}>Confirm your details</h2>
               <div className={styles.confirmationDetails}>
-                <p><strong>address:</strong> {address}</p>
-                <p><strong>phone number:</strong> {phoneNumber}</p>
+                <p><strong>Address:</strong> {address}</p>
+                <p><strong>Phone number:</strong> {phoneNumber}</p>
               </div>
-              <button className={styles.button} onClick={() => setStep(2)}>back</button>
-              <button className={styles.button} onClick={handleProceedToPayment}>proceed to payment</button>
+              <button className={styles.button} onClick={() => setStep(2)}>Back</button>
+              <button className={styles.button} onClick={handleProceedToPayment}>Proceed to payment</button>
             </>
           )}
         </div>

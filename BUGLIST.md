@@ -46,5 +46,15 @@
 |         |                                                                   |          |
 | BUG-022 | Add auto-fill to checkout form address + phone                    | LOW      |
 |         |                                                                   |          |
-| BUG-023 | We need order confirmation page + order creation                  | LOW      |
+| BUG-023 | Add order details to order success page                           | LOW      |
+|         |                                                                   |          |
+| BUG-024 | Update transaction to 'paid' after stripe                         | MED      |
+|         |                                                                   |          |
+| BUG-025 | Add more robust validation to shipping details                    | MED      |
+|         |                                                                   |          |
+| BUG-026 | Clear cart after purchase complete                                | HIGH     |
+|         |                                                                   |          |
+| BUG-027 | Add home redirects to transaction completion pages                | LOW      |
+|         |                                                                   |          |
+| BUG-028 | Compartmentalize search page, make proper homepage                | MED-LOW      |
 |         |                                                                   |          |
