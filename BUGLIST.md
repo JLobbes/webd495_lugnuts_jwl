@@ -42,3 +42,9 @@
 |         |                                                                   |          | 
 | BUG-020 | Add user agreement form to sign-up process?                       | MED-LOW  |
 |         |                                                                   |          | 
+| BUG-021 | If no items in cart, don't have check-out button visible          | LOW      |
+|         |                                                                   |          |
+| BUG-022 | Add auto-fill to checkout form address + phone                    | LOW      |
+|         |                                                                   |          |
+| BUG-023 | We need order confirmation page + order creation                  | LOW      |
+|         |                                                                   |          |

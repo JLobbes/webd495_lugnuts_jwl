@@ -1,0 +1,206 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #000;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  max-width: 500px;
+  margin-left: 10px;
+}
+
+.formTitle {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.reviewTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.orderList {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.itemName {
+  font-weight: bold;
+}
+
+.itemPrice {
+  color: #4CAF50;
+}
+
+.inputGroup {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input {
+  width: 95%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid white;
+  color: black;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.button {
+  padding: 12px;
+  background-color: white;
+  width: 70%;
+  color: black;
+  font-size: 1.1rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.button:hover {
+  background-color: #f0f0f0;
+}
+
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.confirmationTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.confirmationDetails {
+  margin-bottom: 20px;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #000;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  max-width: 500px;
+  margin-left: 10px;
+}
+
+.formTitle {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.reviewTitle {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.orderList {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.orderItem div {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.itemName {
+  font-weight: bold;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.itemPrice {
+  color: #4CAF50;
+  text-align: center;
+}
+
+.itemQty {
+  text-align: center;
+}
+
+.itemSubtotal {
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
+  color: rgb(61, 61, 179);
+}
+
+.totalPrice {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  gap: 10px;
+}
+
+.orderTotal {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.grandTotalPrice {
+  font-weight: bold;
+  color: purple;
+}
