@@ -1,5 +1,6 @@
 .resultsContainer {
   width: 100%;
+  position: relative;
 }
 
 .productList {
@@ -7,12 +8,12 @@
   flex-direction: column;
   gap: 20px;
   justify-content: flex-start;
-  align-items: center; /* center the long tiles */
+  align-items: center;
 }
 
 .productTile {
-  background-color: white; /* White background */
-  color: black; /* Black text */
+  background-color: white;
+  color: black;
   width: 90%;
   padding: 20px;
   display: flex;
@@ -22,7 +23,7 @@
   transition: all 0.3s ease;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid black; /* Black border */
+  border: 1px solid black;
 }
 
 .productTileExpanded {
@@ -55,14 +56,14 @@
 }
 
 .productInfo > * {
-  flex: 1; /* each child given equal width for now */
+  flex: 1;
   text-align: center;
 }
 
 .productDescription {
   font-size: 14px;
-  color: black; /* Black text */
-  max-width: 200px; /* Limit visible description */
+  color: black;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -78,15 +79,40 @@
 
 .productButtons button {
   padding: 10px;
-  background-color: white; /* White background */
-  color: black; /* Black text */
-  border: 1px solid black; /* Black border */
+  background-color: white;
+  color: black;
+  border: 1px solid black;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .productButtons button:hover {
-  background-color: black; /* Black background on hover */
-  color: white; /* White text on hover */
-  border: 1px solid white; /* White border on hover */
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+.checkoutButtonContainer {
+  position: sticky;
+  bottom: 20px;
+  width: 100%;
+  background-color: white; 
+  text-align: center;
+  padding: 10px 0;
+  z-index: 10; 
+}
+
+.checkoutButton {
+  padding: 15px 30px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.checkoutButton:hover {
+  background-color: #333; 
 }

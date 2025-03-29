@@ -3,6 +3,7 @@ import checkAuth from '../hooks/checkAuth';
 import Nav from '../components/nav'; 
 import Footer from '../components/footer'; 
 import styles from '../styles/user_cart.module.css'; 
+import Link from 'next/link';  // Import Link component from next/link
 
 const UserCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -191,6 +192,14 @@ const UserCart = () => {
             ) : (
               <p>Your cart is empty.</p>
             )}
+          </div>
+        )}
+        {/* Checkout Button */}
+        {cartItems.length > 0 && (
+          <div className={styles.checkoutButtonContainer}>
+            <Link href="/checkout">
+              <button className={styles.checkoutButton}>Proceed to Checkout</button>
+            </Link>
           </div>
         )}
       </main>
