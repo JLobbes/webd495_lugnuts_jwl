@@ -40,3 +40,5 @@
 |         |                                                                   |          | 
 | BUG-019 | Not logged in user, redirect to login if clicks add to cart       | MED      |
 |         |                                                                   |          | 
+| BUG-020 | Add user agreement form to sign-up process?                       | MED-LOW  |
+|         |                                                                   |          | 
