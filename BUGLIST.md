@@ -68,3 +68,7 @@
 |         |                                                                   |          |
 | BUG-033 | Admin page product list view shows all, space eater               | MED      |
 |         |                                                                   |          |
+| BUG-034 | Admin page has no way to upload photo file                        | MED      |
+|         |                                                                   |          |
+| BUG-035 | Admin page asks for file path, not name of image                  | LOW      |
+|         |                                                                   |          |
