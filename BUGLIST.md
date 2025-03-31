@@ -56,5 +56,15 @@
 |         |                                                                   |          |
 | BUG-027 | Add home redirects to transaction completion pages                | LOW      |
 |         |                                                                   |          |
-| BUG-028 | Compartmentalize search page, make proper homepage                | MED-LOW      |
+| BUG-028 | Compartmentalize search page, make proper homepage                | MED-LOW  |
+|         |                                                                   |          |
+| BUG-029 | If a user completes a purchase, need a way to faux decrement      | MED      |
+|         | stock. Only truly decrement after shipped.                        |          |
+| BUG-030 | Add authentication and auth for Admin Page                        | HIGH     |
+|         |                                                                   |          |
+| BUG-031 | Admin page product list doesn't have search                       | MED      |
+|         |                                                                   |          |
+| BUG-032 | Admin page edit product form, add close view button               | LOW      |
+|         |                                                                   |          |
+| BUG-033 | Admin page product list view shows all, space eater               | MED      |
 |         |                                                                   |          |

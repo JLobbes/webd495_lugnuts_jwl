@@ -2,15 +2,14 @@
 import db from '../../../lib/db';
 
 export default async function handler(req, res) {
-  const { id } = req.query;
 
   if (req.method === 'PUT') {
-    const { PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_PRICE, PRODUCT_STOCK, PRODUCT_CATEGORY, PRODUCT_IMAGE_URL } = req.body;
+    const { PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_PRICE, PRODUCT_STOCK, PRODUCT_CATEGORY, PRODUCT_IMAGE_URL, PRODUCT_ID } = req.body;
 
     try {
       const [result] = await db.query(
         'UPDATE PRODUCTS SET PRODUCT_NAME = ?, PRODUCT_DESCRIPTION = ?, PRODUCT_PRICE = ?, PRODUCT_STOCK = ?, PRODUCT_CATEGORY = ?, PRODUCT_IMAGE_URL = ? WHERE PRODUCT_ID = ?',
-        [PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_PRICE, PRODUCT_STOCK, PRODUCT_CATEGORY, PRODUCT_IMAGE_URL, id]
+        [PRODUCT_NAME, PRODUCT_DESCRIPTION, PRODUCT_PRICE, PRODUCT_STOCK, PRODUCT_CATEGORY, PRODUCT_IMAGE_URL, PRODUCT_ID]
       );
       if (result.affectedRows > 0) {
         res.status(200).json({ message: 'Product updated' });
