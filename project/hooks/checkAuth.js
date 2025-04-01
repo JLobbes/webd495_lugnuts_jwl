@@ -1,3 +1,4 @@
+// checkAuth only checks Authenticatio state (i.e., is user signed in or not)
 import { useEffect, useState } from 'react';
 import { auth } from '../lib/firebase';
 import { useRouter } from 'next/router';

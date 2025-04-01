@@ -3,7 +3,7 @@ import checkAuth from '../hooks/checkAuth';
 import Nav from '../components/nav'; 
 import Footer from '../components/footer'; 
 import styles from '../styles/user_cart.module.css'; 
-import Link from 'next/link';  // Import Link component from next/link
+import Link from 'next/link';  
 
 const UserCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -17,7 +17,8 @@ const UserCart = () => {
   useEffect(() => {
     if (user) {
       const fetchCart = async () => {
-        const response = await fetch(`../api/cart/read_by_firebase_uid?firebase_uid=${user.uid}`);
+  
+        const response = await fetch(`../api/cart/read_by_firebase_uid?firebase_uid=${user.uid}&idToken=${user.accessToken}`);
         const data = await response.json();
         
         if (data && data.length > 0) {
@@ -31,6 +32,7 @@ const UserCart = () => {
       fetchCart();
     }
   }, [user]);
+  
 
   // Fetch product details for each item in the cart
   const fetchProductDetails = async (cartData) => {
