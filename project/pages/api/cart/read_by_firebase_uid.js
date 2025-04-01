@@ -2,8 +2,8 @@ import db from '../../../lib/db';
 import { verifyAccessToken } from '../../../utils/verifyAccessToken'; 
 
 export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    const { firebase_uid, idToken } = req.query;
+  if (req.method === 'POST') {
+    const { firebase_uid, idToken } = req.body;  
 
     if (!firebase_uid || !idToken) {
       return res.status(400).json({ error: 'Missing firebase_uid or idToken' });
@@ -35,7 +35,6 @@ export default async function handler(req, res) {
       res.status(500).json({ error: err.message });
     }
   } else {
-    // Handle non-GET requests
     res.status(405).json({ error: 'Method not allowed' });
   }
 }

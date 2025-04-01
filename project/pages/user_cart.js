@@ -17,22 +17,37 @@ const UserCart = () => {
   useEffect(() => {
     if (user) {
       const fetchCart = async () => {
-  
-        const response = await fetch(`../api/cart/read_by_firebase_uid?firebase_uid=${user.uid}&idToken=${user.accessToken}`);
-        const data = await response.json();
-        
-        if (data && data.length > 0) {
-          setCartItems(data);
-          fetchProductDetails(data);
-        } else {
-          setCartItems([]);
+        try {
+          const response = await fetch('/api/cart/read_by_firebase_uid', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firebase_uid: user.uid,
+              idToken: user.accessToken,  
+            }),
+          });
+
+          const data = await response.json();
+          
+          if (data && data.length > 0) {
+            setCartItems(data);
+            fetchProductDetails(data);
+          } else {
+            setCartItems([]);
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+          setError('Failed to load cart items');
           setLoading(false);
         }
       };
+
       fetchCart();
     }
   }, [user]);
-  
 
   // Fetch product details for each item in the cart
   const fetchProductDetails = async (cartData) => {
