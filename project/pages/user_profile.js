@@ -21,8 +21,17 @@ export default function UserProfile() {
     if (user) {
       const fetchUserData = async () => {
         try {
-          const response = await fetch(`/api/users/read_by_firebase_uid?id=${user.uid}`);
-          
+          const response = await fetch('/api/users/read_by_firebase_uid', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firebase_uid: user.uid,  // Send the user's Firebase UID
+              idToken: user.accessToken,  // Send the access token for verification
+            }),
+          });
+
           const data = await response.json();
 
           if (data.error) {
@@ -49,10 +58,10 @@ export default function UserProfile() {
   const handleUpdate = async (e, field) => {
     e.preventDefault();
     setLoading(true);
-  
+
     // data to push to DB
     let updateData = {};
-  
+
     // update only the modified fields
     if (field === 'firstName') {
       updateData.USER_FIRST_NAME = firstName;
@@ -65,12 +74,12 @@ export default function UserProfile() {
     } else if (field === 'address') {
       updateData.USER_ADDRESS = address;
     }
-  
+
     updateData = {
       ...initialData, // keep initial data 
       ...updateData,  // adjust for changes
     };
-  
+
     try {
       // send data to API
       const response = await fetch(`/api/users/update_by_firebase_uid?id=${user.uid}`, {
@@ -80,10 +89,10 @@ export default function UserProfile() {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const data = await response.json();
       console.log('Update response:', data);
-  
+
       if (data.message) {
         alert('Profile updated successfully!');
         // reload the page to reflect changes
