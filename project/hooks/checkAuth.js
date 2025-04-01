@@ -10,7 +10,7 @@ const checkAuth = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log('User is signed in:', user);
+        // console.log('User is signed in:', user);
         setUser(user);
       } else {
         console.log('User is not signed in');
@@ -21,7 +21,7 @@ const checkAuth = () => {
     return () => unsubscribe(); // Clean up the listener when the component unmounts
   }, [router]);
 
-  console.log('Current user state:', user);
+  // console.log('Current user state:', user);
 
   return user;
 };

@@ -16,21 +16,37 @@ export default function Checkout() {
   const user = checkAuth();
   const router = useRouter();
 
-  // fetch items in cart
+  // Fetch cart items
   useEffect(() => {
     if (user) {
       const fetchCart = async () => {
-        const response = await fetch(`../api/cart/read_by_firebase_uid?firebase_uid=${user.uid}`);
-        const data = await response.json();
+        try {
+          const response = await fetch('/api/cart/read_by_firebase_uid', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firebase_uid: user.uid,
+              idToken: user.accessToken,  
+            }),
+          });
 
-        if (data && data.length > 0) {
-          setCartItems(data);
-          fetchProductDetails(data);
-        } else {
-          setCartItems([]);  // empty cart
+          const data = await response.json();
+          
+          if (data && data.length > 0) {
+            setCartItems(data);
+            fetchProductDetails(data);
+          } else {
+            setCartItems([]);
+          }
+
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+          setError('Failed to load cart items');
         }
-        setLoading(false);
       };
+
       fetchCart();
     }
   }, [user]);
@@ -176,17 +192,15 @@ export default function Checkout() {
       <Nav />
       <main className={styles.mainContainer}>
         <div className={styles.formContainer}>
-          <h1 className={styles.formTitle}>Checkout</h1>
+          {/* <h1 className={styles.formTitle}>Checkout</h1> */}
 
           {step === 1 && (
             <>
               <h2 className={styles.reviewTitle}>Review Order</h2>
-              {loading ? (
-                <p>loading order...</p>
-              ) : (
-                <div className={styles.orderList}>
+                <div className={styles.orderList}>  
                   {cartItems.length > 0 ? (
                     cartItems.map((item, index) => {
+                    
                       const product = productDetails[item.PRODUCT_ID];
                       if (!product) return null;
 
@@ -202,10 +216,9 @@ export default function Checkout() {
                       );
                     })
                   ) : (
-                    <p>No items in your cart.</p>
+                    <p style={{ textAlign: 'center', padding: '50px' }} >loading cart...</p>
                   )}
                 </div>
-              )}
               <div className={styles.orderTotal}>
                 <span>total:</span>
                 <span className={styles.grandTotalPrice}> ${calculateTotalPrice()}</span>
@@ -217,7 +230,7 @@ export default function Checkout() {
 
           {step === 2 && (
             <>
-              <h2 className={styles.addressTitle}>enter address</h2>
+              <h2 className={styles.addressTitle}>Enter Address</h2>
               <div className={styles.inputGroup}>
                 <label htmlFor="address" className={styles.inputLabel}>Address</label>
                 <input
