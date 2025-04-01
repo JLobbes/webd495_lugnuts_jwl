@@ -1,15 +1,18 @@
 // pages/api/users/update_by_firebase_uid.js
 import db from '../../../lib/db';
+import { verifyAccessToken } from '../../../utils/verifyAccessToken';
 
 export default async function handler(req, res) {
-  const { id } = req.query; // id is the Firebase UID
+  const { idToken, firebase_uid } = req.body; 
   const { USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER } = req.body;
 
-  if (req.method === 'PUT') {
+  if (req.method === 'POST') {
     try {
+      await verifyAccessToken(idToken, firebase_uid);
+
       const [user] = await db.query(
         'SELECT * FROM USERS WHERE FIREBASE_UID = ?',
-        [id] // id is Firebase UID passed in the query
+        [firebase_uid] // the ? item is firebase_uid
       );
 
       // if no user , return error
@@ -19,7 +22,7 @@ export default async function handler(req, res) {
 
       const [result] = await db.query(
         'UPDATE USERS SET USER_EMAIL = ?, USER_FIRST_NAME = ?, USER_LAST_NAME = ?, USER_ADDRESS = ?, USER_PHONE_NUMBER = ? WHERE FIREBASE_UID = ?',
-        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, id] // id is Firebase UID
+        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, firebase_uid] 
       );
 
       if (result.affectedRows > 0) {

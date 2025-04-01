@@ -27,8 +27,8 @@ export default function UserProfile() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              firebase_uid: user.uid,  // Send the user's Firebase UID
-              idToken: user.accessToken,  // Send the access token for verification
+              firebase_uid: user.uid,  
+              idToken: user.accessToken, 
             }),
           });
 
@@ -48,7 +48,7 @@ export default function UserProfile() {
           }
         } catch (err) {
           setError('Failed to fetch user data');
-          console.log('Fetch Error:', err.message); // Log any errors during fetch
+          console.log('Fetch Error:', err.message); 
         }
       };
       fetchUserData();
@@ -82,12 +82,20 @@ export default function UserProfile() {
 
     try {
       // send data to API
-      const response = await fetch(`/api/users/update_by_firebase_uid?id=${user.uid}`, {
-        method: 'PUT',
-        body: JSON.stringify(updateData),
+      const response = await fetch('/api/users/update_by_firebase_uid', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          firebase_uid: user.uid,  
+          idToken: user.accessToken,  
+          USER_EMAIL: updateData.USER_EMAIL,
+          USER_FIRST_NAME: updateData.USER_FIRST_NAME,
+          USER_LAST_NAME: updateData.USER_LAST_NAME,
+          USER_PHONE_NUMBER: updateData.USER_PHONE_NUMBER,
+          USER_ADDRESS: updateData.USER_ADDRESS,
+        }),
       });
 
       const data = await response.json();
