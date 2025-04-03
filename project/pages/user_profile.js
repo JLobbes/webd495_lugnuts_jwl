@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router'; // will use later for nav?
-import { auth } from '../lib/firebase'; // will use later for password email update
+import { useRouter } from 'next/router'; 
+import { auth } from '../lib/firebase'; 
 import checkAuth from '../hooks/checkAuth';  
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import styles from '../styles/user_profile.module.css';
 
 export default function UserProfile() {
-  const user = checkAuth();  // get our signed in user
+  const user = checkAuth();  
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [initialData, setInitialData] = useState(null);  
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -23,13 +23,8 @@ export default function UserProfile() {
         try {
           const response = await fetch('/api/users/read_by_firebase_uid', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              firebase_uid: user.uid,  
-              idToken: user.accessToken, 
-            }),
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firebase_uid: user.uid, idToken: user.accessToken })
           });
 
           const data = await response.json();
@@ -38,8 +33,6 @@ export default function UserProfile() {
             setError(data.error);
           } else {
             setInitialData(data);
-
-            // populate form fields
             setFirstName(data.USER_FIRST_NAME || '');
             setLastName(data.USER_LAST_NAME || '');
             setEmail(data.USER_EMAIL || '');
@@ -59,37 +52,22 @@ export default function UserProfile() {
     e.preventDefault();
     setLoading(true);
 
-    // data to push to DB
     let updateData = {};
+    if (field === 'firstName') updateData.USER_FIRST_NAME = firstName;
+    else if (field === 'lastName') updateData.USER_LAST_NAME = lastName;
+    else if (field === 'email') updateData.USER_EMAIL = email;
+    else if (field === 'phone') updateData.USER_PHONE_NUMBER = phone;
+    else if (field === 'address') updateData.USER_ADDRESS = address;
 
-    // update only the modified fields
-    if (field === 'firstName') {
-      updateData.USER_FIRST_NAME = firstName;
-    } else if (field === 'lastName') {
-      updateData.USER_LAST_NAME = lastName;
-    } else if (field === 'email') {
-      updateData.USER_EMAIL = email;
-    } else if (field === 'phone') {
-      updateData.USER_PHONE_NUMBER = phone;
-    } else if (field === 'address') {
-      updateData.USER_ADDRESS = address;
-    }
-
-    updateData = {
-      ...initialData, // keep initial data 
-      ...updateData,  // adjust for changes
-    };
+    updateData = { ...initialData, ...updateData };
 
     try {
-      // send data to API
       const response = await fetch('/api/users/update_by_firebase_uid', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firebase_uid: user.uid,  
-          idToken: user.accessToken,  
+          firebase_uid: user.uid,
+          idToken: user.accessToken,
           USER_EMAIL: updateData.USER_EMAIL,
           USER_FIRST_NAME: updateData.USER_FIRST_NAME,
           USER_LAST_NAME: updateData.USER_LAST_NAME,
@@ -103,7 +81,6 @@ export default function UserProfile() {
 
       if (data.message) {
         alert('Profile updated successfully!');
-        // reload the page to reflect changes
         window.location.reload();  
       } else {
         alert('Failed to update profile.');
@@ -131,12 +108,12 @@ export default function UserProfile() {
               type="text"
               id="firstName"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}  // Allow changes
+              onChange={(e) => setFirstName(e.target.value)}  
               required
               className={styles.input}
             />
-            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'firstName')} disabled={loading}>
-              {loading ? 'Updating...' : 'Update First Name'}
+            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'firstName')}>
+              Update First Name
             </button>
           </div>
 
@@ -147,12 +124,12 @@ export default function UserProfile() {
               type="text"
               id="lastName"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}  // Allow changes
+              onChange={(e) => setLastName(e.target.value)}  
               required
               className={styles.input}
             />
-            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'lastName')} disabled={loading}>
-              {loading ? 'Updating...' : 'Update Last Name'}
+            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'lastName')}>
+              Update Last Name
             </button>
           </div>
 
@@ -163,12 +140,12 @@ export default function UserProfile() {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}  // Allow changes
+              onChange={(e) => setEmail(e.target.value)}  
               required
               className={styles.input}
             />
-            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'email')} disabled={loading}>
-              {loading ? 'Updating...' : 'Update Email'}
+            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'email')}>
+              Update Email
             </button>
           </div>
 
@@ -179,12 +156,12 @@ export default function UserProfile() {
               type="text"
               id="phone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}  // Allow changes
+              onChange={(e) => setPhone(e.target.value)}  
               required
               className={styles.input}
             />
-            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'phone')} disabled={loading}>
-              {loading ? 'Updating...' : 'Update Phone'}
+            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'phone')}>
+              Update Phone
             </button>
           </div>
 
@@ -195,15 +172,24 @@ export default function UserProfile() {
               type="text"
               id="address"
               value={address}
-              onChange={(e) => setAddress(e.target.value)}  // Allow changes
+              onChange={(e) => setAddress(e.target.value)}  
               required
               className={styles.input}
             />
-            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'address')} disabled={loading}>
-              {loading ? 'Updating...' : 'Update Address'}
+            <button type="submit" className={styles.button} onClick={(e) => handleUpdate(e, 'address')}>
+              Update Address
             </button>
           </div>
+
         </div>
+
+        {/* Loading overlay */}
+        {loading && (
+          <div className={styles.loadingOverlay}>
+            <div className={styles.spinner}></div>
+          </div>
+        )}
+
       </main>
       <Footer />
     </>
