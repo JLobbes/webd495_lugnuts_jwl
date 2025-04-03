@@ -14,19 +14,38 @@ export default function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setError('');
 
     try {
-      // sign in user with Firebase
-      await signInWithEmailAndPassword(auth, email, password);
+      // Sign in with Firebase
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;  // The user object is returned here
 
-      alert('Sign In Successful');
-      router.push('/'); // redirect to homepage
+      // Now that the user is signed in, you can sync the user email in MariaDB
+      try {
+        const response = await fetch('/api/users/update_email_by_firebase_uid', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firebase_uid: user.uid,
+            idToken: user.accessToken,
+            USER_EMAIL: email,
+          }),
+        });
+
+        const data = await response.json();
+        console.log('Sync email Response:', data);
+
+        alert('Sign In Successful');
+        router.push('/');  // Redirect to homepage after successful sign-in
+      } catch (err) {
+        console.log('Error syncing email with MariaDB:', err.message);
+        setError('Error syncing email with database.');
+      }
     } catch (err) {
-      console.log(err.message);
-      setError(err.message);
+      console.log('Sign-in error:', err.message);
+      setError('Invalid credentials, please try again.');
     } finally {
       setLoading(false);
     }
