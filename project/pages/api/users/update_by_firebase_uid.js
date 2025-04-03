@@ -15,14 +15,20 @@ export default async function handler(req, res) {
         [firebase_uid] // the ? item is firebase_uid
       );
 
-      // if no user , return error
+      // if no user, return error
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
+      // ensure role remains unchanged
+      const userRole = await db.query(
+        'SELECT USER_ROLE FROM USERS WHERE FIREBASE_UID = ?',
+        [firebase_uid] // the ? item is firebase_uid
+      );
+
       const [result] = await db.query(
-        'UPDATE USERS SET USER_EMAIL = ?, USER_FIRST_NAME = ?, USER_LAST_NAME = ?, USER_ADDRESS = ?, USER_PHONE_NUMBER = ? WHERE FIREBASE_UID = ?',
-        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, firebase_uid] 
+        'UPDATE USERS SET USER_EMAIL = ?, USER_FIRST_NAME = ?, USER_LAST_NAME = ?, USER_ADDRESS = ?, USER_PHONE_NUMBER = ?, USER_ROLE = ? WHERE FIREBASE_UID = ?',
+        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, userRole.USER_ROLE, firebase_uid] 
       );
 
       if (result.affectedRows > 0) {

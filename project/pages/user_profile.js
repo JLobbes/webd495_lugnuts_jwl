@@ -52,9 +52,7 @@ export default function UserProfile() {
         }
       };
       fetchUserData();
-    } else {
-      window.location.href = './signin_ui.js';
-    }
+    } 
   }, [user]);  
 
   const handleUpdate = async (e, field) => {
