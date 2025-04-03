@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth, createUserWithEmailAndPassword } from '../lib/firebase';
+import { auth, createUserWithEmailAndPassword, sendEmailVerification } from '../lib/firebase';
 import Nav from '../components/nav';
 import Footer from '../components/footer';
 import styles from '../styles/signup.module.css';
@@ -18,6 +18,18 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const sendVerificationEmail = async (user) => {
+    if (user && !user.emailVerified) {
+      try {
+        await sendEmailVerification(user);
+        alert('Verification email sent! Please check your inbox.');
+      } catch (error) {
+        console.log('Error sending verification email:', error);
+        alert('Failed to send verification email.');
+      }
+    }
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -25,11 +37,12 @@ export default function SignUp() {
     setError('');
 
     try {
-      // create user in Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // save the data to MariaDB
+      await sendVerificationEmail(user);
+
+      // Save the data to MariaDB
       if (step === 3) {
         const userData = {
           FIREBASE_UID: user.uid, // these keys need to match the backend API
@@ -42,11 +55,10 @@ export default function SignUp() {
         
         console.log('Sending user data:', userData);
         
-        // send data via POST to backend API
         await axios.post('/api/users/create', userData);
         
         alert('Sign Up Successful');
-        router.push('/'); // redirect to homepage
+        router.push('/'); // Redirect to homepage
       }
     } catch (err) {
       console.log(err.message);
