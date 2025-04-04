@@ -2,6 +2,26 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/admin_ui.module.css'; 
 import Nav from '../components/nav';  
 import Footer from '../components/footer';  
+import checkAuth from '../hooks/checkAuth';  
+
+const checkRole = async (firebase_uid, accessToken) => {
+  try {
+    const response = await fetch('/api/users/read_role', {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify({ 
+        firebase_uid: firebase_uid, 
+        idToken: accessToken
+      }),
+    });
+    const data = await response.json();
+    const role = data[0].USER_ROLE
+    return role;  // Returns the role, e.g., 'admin' or 'user'
+  } catch (error) {
+    console.error("Error checking role:", error);
+    return null;  // Handle the case where role couldn't be fetched
+  }
+};
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -15,16 +35,36 @@ const AdminPage = () => {
     PRODUCT_STOCK: '',
   });
 
-  useEffect(() => {
-    // fetch initial list of products
-    const fetchProducts = async () => {
-      const response = await fetch('/api/products/read_all');
-      const data = await response.json();
-      setProducts(data);
-    };
+  const [loading, setLoading] = useState(true);  
+  const [user, setUser] = useState(null);  
+  const [isAdmin, setIsAdmin] = useState(false);  // Keep track of whether user is admin
 
-    fetchProducts();
-  }, []);
+  const authUser = checkAuth();  
+
+  useEffect(() => {
+    const fetchRoleAndProducts = async () => {
+      if (authUser) {
+        const role = await checkRole(authUser.uid, authUser.accessToken);
+        console.log('Captured Data in Page', typeof(role), role);
+        setIsAdmin(role === 'admin');  // Set isAdmin state based on the role
+        setUser(authUser);
+        fetchProducts(); // Fetch products if user is logged in
+        console.log('speed bump');
+      } else {
+        setLoading(false); // Stop loading if not authenticated
+      }
+    };
+    
+    fetchRoleAndProducts(); // Call the async function
+  }, [authUser]); // Dependency array ensures this runs when authUser changes
+
+  // Fetch products only when the user is authenticated
+  const fetchProducts = async () => {
+    const response = await fetch('/api/products/read_all');
+    const data = await response.json();
+    setProducts(data);
+    setLoading(false); // Stop loading once data is fetched
+  };
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -59,7 +99,6 @@ const AdminPage = () => {
   };
 
   const handleEditProduct = async (productId) => {
-    // simply populates an form below 'add product'
     const response = await fetch(`/api/products/read_by_id?id=${productId}`);
     const data = await response.json();
     if (data) {
@@ -70,7 +109,6 @@ const AdminPage = () => {
   };
 
   const handleSaveEditedProduct = async (e) => {
-    // push updates to db
     e.preventDefault();
 
     if (!editProduct.PRODUCT_ID) {
@@ -117,6 +155,20 @@ const AdminPage = () => {
       alert("Failed to delete product. Please try again.");
     }
   };
+
+  if (loading) {
+    return <div className={styles.loadingOverlay}>
+      <div className={styles.spinner}></div>
+    </div>;
+  }
+
+  if (!user) {
+    return <div>You must be logged in to access this page.</div>;  // Show message if not authenticated
+  }
+
+  if (!isAdmin) {
+    return <div>You must have admin rights to visit this page.</div>;  // Show message if not authenticated
+  }
 
   return (
     <>
