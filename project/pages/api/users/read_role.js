@@ -1,12 +1,14 @@
 // pages/api/users/read_role.js
+// this is for client side verifying of 'admin' role
+// backend verification uses the utility /utils/verify/admin
 import db from '../../../lib/db';
 import { verifyAccessToken } from '../../../utils/verifyAccessToken'; 
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { firebase_uid, idToken } = req.body; // Expect body to contain firebase_uid and idToken
-    console.log('firebase_uid:', firebase_uid);
-    console.log('idToken:', idToken);
+    // console.log('firebase_uid:', firebase_uid);
+    // console.log('idToken:', idToken);
 
     try {
       await verifyAccessToken(idToken, firebase_uid);
@@ -17,7 +19,7 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      console.log('result in backend:', result[0])
+      // console.log('result in backend:', result[0])
 
       res.status(200).json(result[0]);
     } catch (err) {

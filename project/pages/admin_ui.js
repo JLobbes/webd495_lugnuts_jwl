@@ -45,11 +45,9 @@ const AdminPage = () => {
     const fetchRoleAndProducts = async () => {
       if (authUser) {
         const role = await checkRole(authUser.uid, authUser.accessToken);
-        console.log('Captured Data in Page', typeof(role), role);
         setIsAdmin(role === 'admin');  // Set isAdmin state based on the role
         setUser(authUser);
         fetchProducts(); // Fetch products if user is logged in
-        console.log('speed bump');
       } else {
         setLoading(false); // Stop loading if not authenticated
       }
@@ -79,11 +77,18 @@ const AdminPage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newProduct),
+      body: JSON.stringify(
+        { 
+          firebase_uid: user.uid, 
+          idToken: user.accessToken,
+          newProduct: {...newProduct}
+         }
+      ),
     });
 
     const data = await response.json();
-    if (data.success) {
+    console.log('data:', data);
+    if (data.message === 'Product created') {
       setProducts([...products, data.product]);
       setNewProduct({
         PRODUCT_NAME: '',
@@ -122,11 +127,17 @@ const AdminPage = () => {
     }
 
     const response = await fetch('/api/products/update', {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(editProduct),
+      body: JSON.stringify(
+        { 
+          firebase_uid: user.uid, 
+          idToken: user.accessToken,
+          editProduct: {...editProduct}
+         }
+      ),
     });
 
     if (response.status === 200) {
@@ -141,11 +152,17 @@ const AdminPage = () => {
 
   const handleDeleteProduct = async (productId) => {
     const response = await fetch('/api/products/delete', {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: productId }),
+      body: JSON.stringify(
+        { 
+          firebase_uid: user.uid, 
+          idToken: user.accessToken,
+          id: productId
+         }
+      ),
     });
 
     const data = await response.json();
@@ -156,18 +173,14 @@ const AdminPage = () => {
     }
   };
 
-  if (loading) {
-    return <div className={styles.loadingOverlay}>
-      <div className={styles.spinner}></div>
-    </div>;
-  }
-
-  if (!user) {
-    return <div>You must be logged in to access this page.</div>;  // Show message if not authenticated
-  }
+  // if (loading) {
+  //   return <div className={styles.loadingOverlay}>
+  //     <div className={styles.spinner}></div>
+  //   </div>;
+  // }
 
   if (!isAdmin) {
-    return <div>You must have admin rights to visit this page.</div>;  // Show message if not authenticated
+    return <div>Checking to verify your admin rights.</div>;  // Show message if not authenticated
   }
 
   return (
