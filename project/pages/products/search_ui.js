@@ -228,6 +228,7 @@ const Main = () => {
                       ? product.PRODUCT_DESCRIPTION
                       : product.PRODUCT_DESCRIPTION.slice(0, 100) + '...'}
                   </p>
+                  <p>Stock: {product.PRODUCT_STOCK}</p>
                   <p>Price: ${product.PRODUCT_PRICE}</p>
                   <div className={styles.productButtons}>
                     {cartItems[product.PRODUCT_ID] ? (

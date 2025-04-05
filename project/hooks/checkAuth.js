@@ -10,7 +10,7 @@ const checkAuth = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        // console.log('User is signed in:', user);
+        console.log('User is signed in:', user);
         setUser(user);
       } else {
         console.log('User is not signed in');

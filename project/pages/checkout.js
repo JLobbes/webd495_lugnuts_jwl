@@ -87,7 +87,11 @@ export default function Checkout() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify({
+        orderData: orderData,
+        firebase_uid: user.uid,
+        idToken: user.accessToken
+      }),
     });
 
     if (!orderResponse.ok) {

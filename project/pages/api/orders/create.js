@@ -1,33 +1,30 @@
 // /pages/api/orders/create.js
 import db from '../../../lib/db';
-
-// Function to get the USER_ID using the firebase_uid from the /api/users/read_by_firebase_uid API
-const getUserIdFromFirebaseUid = async (firebaseUid) => {
-  const response = await fetch(`http://localhost:3000/api/users/read_by_firebase_uid?id=${firebaseUid}`);
-
-  if (!response.ok) {
-    throw new Error('User not found');
-  }
-
-  const user = await response.json();
-  return user.USER_ID;
-};
+import { verifyAccessToken } from '../../../utils/verifyAccessToken';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { FIREBASE_UID, ORDER_DATE, ORDER_TOTAL_AMOUNT, ORDER_STATUS, ORDER_SHIPPING_ADDRESS } = req.body;
-
-    // Debugging: Log incoming data
-    console.log('Received Order Data:', req.body);
+    const { ORDER_DATE, ORDER_TOTAL_AMOUNT, ORDER_STATUS, ORDER_SHIPPING_ADDRESS } = req.body.orderData;
+    const { idToken, firebase_uid } = req.body;
+    console.log('idToken:', idToken);
+    console.log('firebase_uid:', firebase_uid);
 
     // Ensure all required fields are present
-    if (!FIREBASE_UID || !ORDER_DATE || !ORDER_TOTAL_AMOUNT || !ORDER_STATUS || !ORDER_SHIPPING_ADDRESS) {
+    if (!ORDER_DATE || !ORDER_TOTAL_AMOUNT || !ORDER_STATUS || !ORDER_SHIPPING_ADDRESS) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     try {
-      // Fetch the USER_ID using FIREBASE_UID from the /api/users/read_by_firebase_uid API
-      const USER_ID = await getUserIdFromFirebaseUid(FIREBASE_UID);
+      // First: Verify request comes from signed in user
+      await verifyAccessToken(idToken, firebase_uid);
+
+      // Get USER_ID using firebase_uid
+      const idQuery = await db.query(
+        'SELECT USER_ID FROM USERS WHERE FIREBASE_UID = ?',
+        [firebase_uid]
+      );
+      const USER_ID = idQuery[0][0].USER_ID;
+      console.log('USER_ID:', USER_ID);
 
       // Insert the order into the database with the correct USER_ID
       const [result] = await db.query(
