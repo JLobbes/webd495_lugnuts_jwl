@@ -71,106 +71,34 @@ export default function Checkout() {
   const handleProceedToPayment = async () => {
     const orderTotalAmount = calculateTotalPrice();
     
-    // Step 1: Create order
-    const orderData = {
-      FIREBASE_UID: user.uid,
-      ORDER_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
-      ORDER_TOTAL_AMOUNT: parseFloat(orderTotalAmount),  // must be a number
-      ORDER_STATUS: 'pending',
-      ORDER_SHIPPING_ADDRESS: address,
-    };
-
-    console.log('Creating order with data:', orderData);
-
-    const orderResponse = await fetch('/api/orders/create', {
+    const response = await fetch('/api/stripe/prepare_checkout_session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        orderData: orderData,
         firebase_uid: user.uid,
-        idToken: user.accessToken
+        idToken: user.accessToken,
+        cartItems: cartItems,
+        ORDER_TOTAL_AMOUNT: parseFloat(orderTotalAmount),
+        ORDER_SHIPPING_ADDRESS: address,
+        phone: phoneNumber,
       }),
     });
-
-    if (!orderResponse.ok) {
-      console.error('Failed to create order');
-      alert('Failed to create order');
+  
+    if (!response.ok) {
+      console.error('Failed to prepare checkout');
+      alert('Failed to prepare checkout');
       return;
     }
-
-    const order = await orderResponse.json();
-
-    // Step 2: Add order items
-    for (let item of cartItems) {
-      const product = productDetails[item.PRODUCT_ID];
-      const orderItemData = {
-        ORDER_ID: order.ORDER_ID,
-        PRODUCT_ID: item.PRODUCT_ID,
-        ORDER_ITEM_QUANTITY: item.CART_ITEM_QUANTITY,
-        ORDER_ITEM_PRICE: product.PRODUCT_PRICE,
-      };
-
-      const orderItemResponse = await fetch('/api/orderitems/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderItemData),
-      });
-
-      if (!orderItemResponse.ok) {
-        console.error('Failed to add order item');
-        alert('Failed to add order item');
-        return;
-      }
-
-      const orderItem = await orderItemResponse.json();
-      console.log('Order item added:', orderItem);
-    }
-
-    // Step 3: Create transaction
-    const transactionData = {
-      ORDER_ID: order.ORDER_ID,
-      TRANSACTION_PAYMENT_STATUS: 'pending',
-      TRANSACTION_PAYMENT_METHOD: 'stripe',
-      TRANSACTION_PAYMENT_DATE: new Date().toISOString().replace('T', ' ').replace('Z', ''),
-    };
-
-    const transactionResponse = await fetch('/api/transactions/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(transactionData),
-    });
-
-    if (!transactionResponse.ok) {
-      console.error('Failed to create transaction');
-      alert('Failed to create transaction');
-      return;
-    }
-
-    const transaction = await transactionResponse.json();
-
-    const stripeResponse = await fetch('/api/stripe/create-checkout-session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderTotalAmount: parseFloat(orderTotalAmount),
-        user: user,  
-      }),
-    });
-
-    // Use Stripe.js to redirect to the Checkout page
+  
+    const { sessionId } = await response.json();
+  
+    // Step 2: Redirect to Stripe Checkout
     const stripe = window.Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-    const { sessionId } = await stripeResponse.json();
     await stripe.redirectToCheckout({ sessionId });
   };
-
+  
   // per item price
   const calculateItemTotalPrice = (productPrice, quantity) => {
     return (productPrice * quantity).toFixed(2);  // return as a formatted string
