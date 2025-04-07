@@ -89,7 +89,7 @@ const AdminPage = () => {
     const data = await response.json();
     console.log('data:', data);
     if (data.message === 'Product created') {
-      setProducts([...products, data.product]);
+      fetchProducts();
       setNewProduct({
         PRODUCT_NAME: '',
         PRODUCT_DESCRIPTION: '',
@@ -179,9 +179,9 @@ const AdminPage = () => {
   //   </div>;
   // }
 
-  if (!isAdmin) {
-    return <div>Checking to verify your admin rights.</div>;  // Show message if not authenticated
-  }
+  // if (!isAdmin) {
+  //   return <div>Requires admin rights.</div>;  // Show message if not authenticated
+  // }
 
   return (
     <>
