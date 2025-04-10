@@ -179,9 +179,9 @@ const AdminPage = () => {
   //   </div>;
   // }
 
-  // if (!isAdmin) {
-  //   return <div>Requires admin rights.</div>;  // Show message if not authenticated
-  // }
+  if (!isAdmin) {
+    return <div>Requires admin rights.</div>;  // Show message if not authenticated
+  }
 
   return (
     <>
