@@ -69,6 +69,7 @@ const Nav = () => {
             {user ? (
               <>
                 <a href='/user_cart'>My Cart</a>
+                <a href='/user_orders'>My Orders</a>
                 <a href='/user_profile'>My Profile</a>
                 <a href='#' onClick={handleSignOut}>Sign Out</a>
               </>
