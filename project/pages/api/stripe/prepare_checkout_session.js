@@ -1,3 +1,4 @@
+// pages/api/stripe/prepare_checkout_session.js
 import Stripe from 'stripe';
 import { verifyAccessToken } from '../../../utils/verifyAccessToken'; 
 import db from '../../../lib/db'; 
