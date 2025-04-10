@@ -1,5 +1,5 @@
-// pages/api/webhooks.js
 import Stripe from 'stripe';
+import completeOrder from '../../utils/completeOrder'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -23,9 +23,26 @@ export default async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
+  // Log the entire event to see its structure
+  console.log('Stripe Event: ', JSON.stringify(event, null, 2));
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    // Handle the event (e.g., update your database with payment status)
+
+    // Log the session object to check the metadata
+    console.log('Session Data: ', session);
+
+    // Access the metadata for orderID and firebaseUID
+    const orderID = session.metadata.order_id;
+    const firebaseUID = session.metadata.firebase_uid;
+
+    console.log('Order ID: ', orderID);
+    console.log('Firebase UID: ', firebaseUID);
+
+    // Call your completeOrder function with the extracted data
+    await completeOrder(orderID, firebaseUID);
+
+    // Optionally, update your database or perform other actions here.
   }
 
   res.json({ received: true });
