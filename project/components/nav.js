@@ -6,9 +6,13 @@ import checkAuth from '../hooks/checkAuth';
 import { signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 
+
+
 const Nav = () => {
   const user = checkAuth();  
   const router = useRouter();
+  const [searchText, setSearchText] = useState('');
+
 
   const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown visibility
 
@@ -23,6 +27,12 @@ const Nav = () => {
     }
   };
 
+  const handleSearchRedirect = () => {
+    if (searchText.trim()) {
+      router.push(`/product_search?query=${encodeURIComponent(searchText)}`);
+    }
+  };
+
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen); // Toggle dropdown visibility
 
   return (
@@ -34,19 +44,19 @@ const Nav = () => {
       </div>
 
       <div className={styles.navElements}>
-        <div className={styles.searchContainer}>
-          <div className={styles.searchBarWrapper}>
-            <a href='/search'>
-              <FaSearch className={styles.searchIcon} />
-            </a>
-            <input
-              className={styles.searchBar}
-              type="text"
-              placeholder="Search..."
-            />
-          </div>
-
+        <div className={styles.searchBarWrapper}>
+          <button onClick={handleSearchRedirect} className={styles.searchButton}>
+            <FaSearch className={styles.searchIcon} />
+          </button>
+          <input
+            className={styles.searchBar}
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </div>
+
         <div className={styles.cart}>
           <a href='/user_cart'>
             <img src="cart_icon.png" alt="Cart Icon" />
@@ -61,7 +71,7 @@ const Nav = () => {
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div className={styles.dropdownMenu}>
-            <a href='/search'>
+            <a href='/product_search'>
               Catelog
               &#128269; 
             </a>

@@ -1,14 +1,30 @@
 import { useState, useEffect } from 'react';
-import checkAuth from '../../hooks/checkAuth';  
-import styles from '../../styles/search_ui.module.css'; 
+import checkAuth from '../hooks/checkAuth';  
+import styles from '../styles/product_search.module.css'; 
+import Nav from '../components/nav';
+import Footer from '../components/footer';
+import { useRouter } from 'next/router';
 
 const Main = () => {
   const [query, setQuery] = useState('');
   const [products, setProducts] = useState([]);
   const [expandedProduct, setExpandedProduct] = useState(null);
   const [cartItems, setCartItems] = useState({});  
-
+  
+  const router = useRouter();
   const user = checkAuth();
+
+  useEffect(() => {
+    if (router.query.query) {
+      setQuery(router.query.query);
+    }
+  }, [router.query]);
+  
+  useEffect(() => {
+    if (query) {
+      handleSearch();
+    }
+  }, [query]);
 
   // fetch cart items if user is logged in
   useEffect(() => {
@@ -192,65 +208,69 @@ const Main = () => {
   };
 
   return (
-    <main className="main-container">
-      <h1>Search Products</h1>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search by name"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+    <>
+      <Nav />
+      <main className="main-container">
+        <h1>Search Products</h1>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
 
-      <div className={styles.resultsContainer}>
-        <h2>Results</h2>
-        {products.length > 0 ? (
-          <div className={styles.productList}>
-            {products.map((product) => (
-              <div
-                key={product.PRODUCT_ID}
-                className={`${styles.productTile} ${expandedProduct === product.PRODUCT_ID ? styles.productTileExpanded : ''}`}
-                onClick={() => handleExpandProduct(product.PRODUCT_ID)}
-              >
-                <div className={styles.productImageContainer}>
-                  <img
-                    src={product.PRODUCT_IMAGE_URL}
-                    alt={product.PRODUCT_NAME}
-                    className={styles.productImage}
-                  />
-                </div>
-                <div className={styles.productInfo}>
-                  <h3>{product.PRODUCT_NAME}</h3>
-                  <p className={styles.productDescription}>
-                    {expandedProduct === product.PRODUCT_ID
-                      ? product.PRODUCT_DESCRIPTION
-                      : product.PRODUCT_DESCRIPTION.slice(0, 100) + '...'}
-                  </p>
-                  <p>Stock: {product.PRODUCT_STOCK}</p>
-                  <p>Price: ${product.PRODUCT_PRICE}</p>
-                  <div className={styles.productButtons}>
-                    {cartItems[product.PRODUCT_ID] ? (
-                      <>
-                        <span>{cartItems[product.PRODUCT_ID]} in cart</span>
-                        <button onClick={() => handleRemoveFromCart(product.PRODUCT_ID)}>Remove from Cart</button>
-                        <button onClick={() => decreaseQuantity(product.PRODUCT_ID)}>-</button>
-                        <button onClick={() => increaseQuantity(product.PRODUCT_ID)}>+</button>
-                      </>
-                    ) : (
-                      <button onClick={() => handleAddToCart(product.PRODUCT_ID)}>Add to Cart</button>
-                    )}
+        <div className={styles.resultsContainer}>
+          <h2>Results</h2>
+          {products.length > 0 ? (
+            <div className={styles.productList}>
+              {products.map((product) => (
+                <div
+                  key={product.PRODUCT_ID}
+                  className={`${styles.productTile} ${expandedProduct === product.PRODUCT_ID ? styles.productTileExpanded : ''}`}
+                  onClick={() => handleExpandProduct(product.PRODUCT_ID)}
+                >
+                  <div className={styles.productImageContainer}>
+                    <img
+                      src={product.PRODUCT_IMAGE_URL}
+                      alt={product.PRODUCT_NAME}
+                      className={styles.productImage}
+                    />
+                  </div>
+                  <div className={styles.productInfo}>
+                    <h3>{product.PRODUCT_NAME}</h3>
+                    <p className={styles.productDescription}>
+                      {expandedProduct === product.PRODUCT_ID
+                        ? product.PRODUCT_DESCRIPTION
+                        : product.PRODUCT_DESCRIPTION.slice(0, 100) + '...'}
+                    </p>
+                    <p>Stock: {product.PRODUCT_STOCK}</p>
+                    <p>Price: ${product.PRODUCT_PRICE}</p>
+                    <div className={styles.productButtons}>
+                      {cartItems[product.PRODUCT_ID] ? (
+                        <>
+                          <span>{cartItems[product.PRODUCT_ID]} in cart</span>
+                          <button onClick={() => handleRemoveFromCart(product.PRODUCT_ID)}>Remove from Cart</button>
+                          <button onClick={() => decreaseQuantity(product.PRODUCT_ID)}>-</button>
+                          <button onClick={() => increaseQuantity(product.PRODUCT_ID)}>+</button>
+                        </>
+                      ) : (
+                        <button onClick={() => handleAddToCart(product.PRODUCT_ID)}>Add to Cart</button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p>No products found</p>
-        )}
-      </div>
-    </main>
+              ))}
+            </div>
+          ) : (
+            <p>No products found</p>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 };
 

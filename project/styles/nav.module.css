@@ -52,15 +52,23 @@
   position: relative;
 }
 
+
+.searchButton {
+  background: none;
+  border: none;
+  height: 0px;
+  width: 0px;
+}
+
 .searchIcon {
   position: absolute;
-  left: 10px;
+  left: 25px;
   top: 50%;
   transform: translateY(-50%);
   color: white;
   font-size: 1.2rem;
+  cursor: pointer;
 }
-
 
 .cart img {
   height: 65px;
