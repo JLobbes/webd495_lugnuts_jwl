@@ -16,10 +16,6 @@ export default async function handler(req, res) {
     }
     const USER_ID = userQuery[0][0].USER_ID;
 
-    // const orders = await db.query(
-    //   `SELECT * FROM ORDERS WHERE USER_ID = ? ORDER BY ORDER_DATE DESC`,
-    //   [USER_ID]
-    // );
 
     const orders = await db.query(
       `SELECT o.ORDER_ID, o.ORDER_STATUS, o.ORDER_DATE, o.ORDER_SHIPPING_ADDRESS,
@@ -33,20 +29,21 @@ export default async function handler(req, res) {
 
     console.log('orders:', orders);
 
-    const fullOrders = await Promise.all(orders[0].map(async (order) => {
+    const fullOrders = [];
+    for (const order of orders[0]) {
       const orderItems = await db.query(
         `SELECT oi.ORDER_ITEM_QUANTITY, p.* 
-         FROM ORDERITEMS oi
-         JOIN PRODUCTS p ON oi.PRODUCT_ID = p.PRODUCT_ID
-         WHERE oi.ORDER_ID = ?`,
+        FROM ORDERITEMS oi
+        JOIN PRODUCTS p ON oi.PRODUCT_ID = p.PRODUCT_ID
+        WHERE oi.ORDER_ID = ?`,
         [order.ORDER_ID]
       );
 
-      return {
+      fullOrders.push({
         ...order,
         items: orderItems[0]
-      };
-    }));
+      });
+    }
 
     console.log('full orders:', fullOrders);
 
