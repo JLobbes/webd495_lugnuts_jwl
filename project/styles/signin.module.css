@@ -87,3 +87,19 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+.signupRedirect {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.signupLink {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signupLink:hover {
+  text-decoration: underline;
+}

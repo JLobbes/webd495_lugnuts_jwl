@@ -85,6 +85,9 @@ export default function SignIn() {
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
+          <p className={styles.signupRedirect}>
+            Don’t have an account? <a href="/signup_ui" className={styles.signupLink}>Sign up here</a>
+          </p>
         </div>
       </main>
       <Footer />
