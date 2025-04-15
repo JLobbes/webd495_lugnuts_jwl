@@ -2,10 +2,10 @@ import mysql from 'mysql2';
 
 // a pool is a set of resuable DBs as opposed to single instance connections
 const pool = mysql.createPool({
-  host: 'localhost',        // local for now, ClearDB after Deployment??
-  user: 'root',             // on my machine
-  password: 'bananas',      // on my machine
-  database: 'lugnuts_db',  // relevant name
+  host: process.env.DB_HOST,       
+  user: process.env.DB_USER,            
+  password: process.env.DB_PASS,     
+  database: process.env.DB_NAME,  
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
