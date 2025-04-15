@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';  
-import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app'; 
+import { initializeApp, getApps } from 'firebase-admin/app'; 
 
 export const verifyAccessToken = async (idToken, firebase_uid) => {
   
@@ -8,7 +8,7 @@ export const verifyAccessToken = async (idToken, firebase_uid) => {
 
   if (getApps().length === 0) {
     initializeApp({
-      credential: credentials,  
+      credential: cert(credentials),
     });
   }
 
