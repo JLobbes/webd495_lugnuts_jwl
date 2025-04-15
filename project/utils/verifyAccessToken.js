@@ -4,9 +4,11 @@ import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
 export const verifyAccessToken = async (idToken, firebase_uid) => {
   
   // initialize Firebase Admin SDK if not ready
+  const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+
   if (getApps().length === 0) {
     initializeApp({
-      credential: applicationDefault(),  
+      credential: credentials,  
     });
   }
 
