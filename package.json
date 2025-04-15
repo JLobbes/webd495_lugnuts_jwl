@@ -1,7 +1,9 @@
 {
-  "name": "heroku-launcher",
+  "name": "launcher",
   "version": "1.0.0",
   "private": true,
-  "description": "Launcher for Heroku to detect Node",
-  "scripts": {}
+  "scripts": {
+    "start": "cd project && npm start",
+    "heroku-postbuild": "cd project && npm install && npm run build"
+  }
 }
