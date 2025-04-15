@@ -51,17 +51,19 @@ const Nav = () => {
           <input
             className={styles.searchBar}
             type="text"
-            placeholder="Search..."
+            placeholder="Search for parts..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
 
-        <div className={styles.cart}>
-          <a href='/user_cart'>
-            <img src="cart_icon.png" alt="Cart Icon" />
-          </a>
-        </div>
+        {user && (
+          <div className={styles.cart}>
+            <a href='/user_cart'>
+              <img src="cart_icon.png" alt="Cart Icon" />
+            </a>
+          </div>
+        )}
 
         <button onClick={toggleDropdown} className={styles.dropdownButton}>
           More
