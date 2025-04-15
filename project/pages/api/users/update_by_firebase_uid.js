@@ -21,14 +21,16 @@ export default async function handler(req, res) {
       }
 
       // ensure role remains unchanged
-      const userRole = await db.query(
+      const userRoleQuery = await db.query(
         'SELECT USER_ROLE FROM USERS WHERE FIREBASE_UID = ?',
         [firebase_uid] // the ? item is firebase_uid
       );
+      const USER_ROLE = userRoleQuery[0][0].USER_ROLE;
+      console.log('USER_ROLE:', USER_ROLE);
 
       const [result] = await db.query(
         'UPDATE USERS SET USER_EMAIL = ?, USER_FIRST_NAME = ?, USER_LAST_NAME = ?, USER_ADDRESS = ?, USER_PHONE_NUMBER = ?, USER_ROLE = ? WHERE FIREBASE_UID = ?',
-        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, userRole.USER_ROLE, firebase_uid] 
+        [USER_EMAIL, USER_FIRST_NAME, USER_LAST_NAME, USER_ADDRESS, USER_PHONE_NUMBER, USER_ROLE, firebase_uid] 
       );
 
       if (result.affectedRows > 0) {
