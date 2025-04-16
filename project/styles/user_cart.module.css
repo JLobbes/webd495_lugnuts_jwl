@@ -37,8 +37,8 @@
 }
 
 .productImage {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
@@ -115,4 +115,8 @@
 
 .checkoutButton:hover {
   background-color: #333; 
+}
+
+.cartItemQuantity {
+  font-size: 2em;
 }

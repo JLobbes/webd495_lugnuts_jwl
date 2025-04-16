@@ -251,7 +251,7 @@ const Main = () => {
                     <div className={styles.productButtons}>
                       {cartItems[product.PRODUCT_ID] ? (
                         <>
-                          <span>{cartItems[product.PRODUCT_ID]} in cart</span>
+                          <span style={{ marginTop: '15px' }}>{cartItems[product.PRODUCT_ID]} in cart</span>
                           <button onClick={() => handleRemoveFromCart(product.PRODUCT_ID)}>Remove from Cart</button>
                           <button onClick={() => decreaseQuantity(product.PRODUCT_ID)}>-</button>
                           <button onClick={() => increaseQuantity(product.PRODUCT_ID)}>+</button>

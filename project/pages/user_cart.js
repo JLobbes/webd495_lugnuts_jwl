@@ -196,7 +196,7 @@ const UserCart = () => {
                         <p>{product.PRODUCT_DESCRIPTION.slice(0, 100)}...</p>
                         <p>Price: ${product.PRODUCT_PRICE}</p>
                         <div className={styles.productButtons}>
-                          <span>{item.CART_ITEM_QUANTITY} in cart</span>
+                          <span style={{ marginTop: '10px' }}>{item.CART_ITEM_QUANTITY} in cart</span>
                           <button onClick={() => decreaseQuantity(item.PRODUCT_ID)}>-</button>
                           <button onClick={() => increaseQuantity(item.PRODUCT_ID)}>+</button>
                           <button onClick={() => handleRemoveFromCart(item.PRODUCT_ID)}>Remove</button>
