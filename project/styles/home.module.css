@@ -1,5 +1,4 @@
 .main {
-  padding: 40px;
   text-align: center;
   color: #000;
   max-height: 80vh;
@@ -62,8 +61,35 @@
   overflow: hidden;
 }
 
-/* .newsOverlay {
-  background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 8px;
-} */
+.alertBox {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: auto;
+  min-width: 350px;
+  margin: 50px 0px 10px 0px;
+  background-color: #fff;
+  border: 3px solid #111;
+  border-radius: 10px;
+  box-shadow: 10px 10px 10px #fff;
+}
+
+.alertEscape {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  text-align: right;
+}
+
+.alertMessage {
+  padding: 10px;
+}
+
+.alertMessage p {
+  font-size: 1.25rem;
+  text-align: center;
+}

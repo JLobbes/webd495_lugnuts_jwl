@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSearch, FaCaretDown } from 'react-icons/fa';  // Import FaCaretDown icon
+import { FaXmark } from "react-icons/fa6";
 import styles from '../styles/nav.module.css';
 import { useRouter } from 'next/router';
 import checkAuth from '../hooks/checkAuth';  
@@ -12,9 +13,19 @@ const Nav = () => {
   const user = checkAuth();  
   const router = useRouter();
   const [searchText, setSearchText] = useState('');
-
-
+  const [alert, setAlert] = useState({ visible: false, message: '' })
   const [dropdownOpen, setDropdownOpen] = useState(false); // State for dropdown visibility
+
+
+  useEffect(() => {
+    const handleShowAlert = (e) => {
+      setAlert({ visible: true, message: e.detail });
+      setTimeout(() => setAlert({ visible: false, message: '' }), 3000);
+    };
+
+    window.addEventListener('show-global-alert', handleShowAlert);
+    return () => window.removeEventListener('show-global-alert', handleShowAlert);
+  }, []);
 
   // Sign out logic
   const handleSignOut = async () => {
@@ -98,6 +109,26 @@ const Nav = () => {
 
         {/* <span>{user.displayName || 'User'}</span> */}
       </div>
+      {alert.visible && (
+        <div className={styles.alertBox}>
+          <div className={styles.alertEscape} onClick={() => setAlert({ visible: false, message: '' })}>
+            <FaXmark />
+          </div>
+          <div className={styles.alertMessage}>
+            <p>{alert.message}</p>
+          </div>
+        </div>
+      )}
+    
+    {/* 
+    <div className={styles.alertBox}>
+      <div className={styles.alertEscape}>
+        <FaXmark />
+      </div>
+      <div className={styles.alertMessage}>
+        <p>This is a pop-up message.</p>
+      </div>
+    </div> */}
     </nav>
   );
 };
